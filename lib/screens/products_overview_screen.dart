@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_complete_guide/screens/cart_screen.dart';
+import 'package:flutter_complete_guide/widgets/app_drawer.dart';
+import 'package:flutter_complete_guide/widgets/badge.dart';
 import 'package:provider/provider.dart';
 
+import '../providers/cart.dart';
 import '../providers/products_provider.dart';
 import '../widgets/products_grid.dart';
 
@@ -16,9 +20,21 @@ class _ProductsOverviewScreenState extends State<ProductsOverviewScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      drawer: AppDrawer(),
       appBar: AppBar(
         title: Text('Namma Kadai.com'),
         actions: [
+          Consumer<Cart>(
+            builder: (_, cart, ch) => BadgeCart(
+              child: ch,
+              value: cart.itemCount.toString(),
+            ),
+            child: IconButton(
+                onPressed: () {
+                  Navigator.of(context).pushNamed(CartScreen.routeName);
+                },
+                icon: Icon(Icons.shopping_bag)),
+          ),
           PopupMenuButton(
             onSelected: (FilterOptions value) {
               setState(() {
@@ -37,10 +53,10 @@ class _ProductsOverviewScreenState extends State<ProductsOverviewScreen> {
               PopupMenuItem(
                 child: Text('Show all'),
                 value: FilterOptions.All,
-              )
+              ),
             ],
             icon: Icon(Icons.more_vert),
-          )
+          ),
         ],
         centerTitle: true,
       ),
